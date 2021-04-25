@@ -1,0 +1,8 @@
+data/
+
+*.pyc
+pycache/
+
+.idea
+.DS_Store
+

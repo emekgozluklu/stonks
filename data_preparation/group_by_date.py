@@ -1,5 +1,5 @@
+from collections import OrderedDict
 import pandas as pd
-import numpy as np
 import joblib
 import os
 
@@ -37,7 +37,7 @@ for file in files:
     df = pd.read_csv(f"{data_path}/{file}")
     df = add_date_column(df)
 
-    grouped = {}
+    grouped = OrderedDict()
     for i in df.groupby("date"):
         grouped[i[0]] = i[1]
 

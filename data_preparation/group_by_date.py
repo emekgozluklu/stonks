@@ -5,7 +5,7 @@ import os
 
 # set read and write data paths
 data_path = "../data/imputed/1min"
-write_data_path= "../data/imputed/grouped_by_date_test"
+write_data_path= "../data/imputed/grouped_by_date"
 
 # get the list of files to be read
 files = os.listdir(data_path)

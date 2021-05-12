@@ -4,8 +4,11 @@ import joblib
 import os
 
 # set read and write data paths
-data_path = "../data/imputed/1min"
-write_data_path= "../data/imputed/grouped_by_date"
+data_path = os.path.join("..","data","imputed","1min")
+write_data_path= os.path.join("..","data","imputed","grouped_by_date")
+
+#ters slasha cevir
+
 
 # get the list of files to be read
 files = os.listdir(data_path)
@@ -34,11 +37,14 @@ for file in files:
     label = file.split(".")[0]
     print("Processing: ", label)
 
-    df = pd.read_csv(f"{data_path}/{file}")
+    df = pd.read_csv(os.path.join(data_path,file))
+    #ters slah at
+
     df = add_date_column(df)
 
     grouped = OrderedDict()
     for i in df.groupby("date"):
         grouped[i[0]] = i[1]
 
-    joblib.dump(grouped, f"{write_data_path}/{label}.joblib")
+    joblib.dump(grouped, os.path.join(write_data_path,label + ".joblib"))
+

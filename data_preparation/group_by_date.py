@@ -7,7 +7,7 @@ import os
 data_path = os.path.join("..","data","imputed","1min")
 write_data_path= os.path.join("..","data","imputed","grouped_by_date")
 
-#ters slasha cevir
+# ters slasha cevir
 
 
 # get the list of files to be read

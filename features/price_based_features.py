@@ -4,10 +4,12 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
+
+
 pd.set_option("display.precision", 4)
 
-DATA_PATH = "../data/imputed/1min/"
-GROUPED_BY_DATE_PATH = "../data/imputed/grouped_by_date/"
+DATA_PATH = os.path.join("..", "data", "imputed", "1min")
+GROUPED_BY_DATE_PATH = os.path.join("..", "data", "imputed", "grouped_by_date")
 OFFSET = 30  # minutes from start
 FILES = os.listdir(DATA_PATH)
 FILES_GROUPED_BY_DATE = os.listdir(GROUPED_BY_DATE_PATH)
@@ -48,6 +50,7 @@ def get_daily_price_based_features(daily_data):
         "last_30_min_interval": [0] * OFFSET,
         "daily_avg_until_now": [0] * OFFSET,
         "deviation_from_daily_avg_until_now": [0] * OFFSET,
+
     }
 
     for i in range(30, len(close)):

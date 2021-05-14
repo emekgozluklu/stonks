@@ -1,5 +1,7 @@
-import numpy as np
 from datetime import datetime
+import pandas as pd
+import numpy as np
+import os
 
 
 class StockImputer:
@@ -24,6 +26,8 @@ class StockImputer:
 
         if not keep_values:
             self.filler_row[4:] = row[4:]  # take the values of current row
+        else:
+            self.filler_row[8:10] = [0, 0]
 
         self.imputed_data.append(self.filler_row.copy())  # add row to the imputed dataset
 
@@ -59,3 +63,28 @@ class StockImputer:
                     self._add_until_row(row)
                     continue
         self.imputed_data_as_array = np.array(self.imputed_data)
+
+
+if __name__ == "__main__":
+
+    DATA_PATH = os.path.join("..", "data", "combined")
+    stocks = [file[:-4] for file in os.listdir(DATA_PATH)]
+    imputed_write_path = os.path.join("..", "data", "imputed_1min")
+
+    try:
+        os.mkdir(imputed_write_path)
+    except FileExistsError:
+        pass
+
+    for stock in stocks:
+
+        historical_df = pd.read_csv(os.path.join(DATA_PATH, f"{stock}.csv"))
+        historical_array = historical_df.to_numpy()
+
+        imputer = StockImputer(historical_array)
+        imputer.impute()
+
+        imputed_df = pd.DataFrame(data=imputer.imputed_data_as_array, columns=historical_df.columns)
+
+        imputed_df.to_csv(os.path.join(imputed_write_path, stock+".csv"))
+        print(f"{stock} done!")

@@ -52,4 +52,4 @@ for file in files:
         daily["total_quantity"].append(grouped_data[i]["total_quantity"].iloc[-1].sum())
         daily["weighted_average"].append(grouped_data[i]["weighted_average"].iloc[-1])
 
-    joblib.dump(pd.DataFrame(data=daily), os.path.join(data_write_path, label[:-4] + ".joblib"))
+    joblib.dump(pd.DataFrame(data=daily), os.path.join(data_write_path, label + ".joblib"))

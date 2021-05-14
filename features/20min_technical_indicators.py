@@ -12,6 +12,45 @@ GROUPED_BY_DATE_PATH = os.path.join("..", "data", "imputed", "grouped_by_date")
 OFFSET = 20  # minutes from start
 FILES = os.listdir(DATA_PATH)
 FILES_GROUPED_BY_DATE = os.listdir(GROUPED_BY_DATE_PATH)
+EMA20_MULTIPLIER = (2 / (OFFSET + 1))
+
+
+def get_technical_indicator_features(daily_data):
+    close = daily_data["close"].to_numpy()
+    high = daily_data["high"].to_numpy()  # daily closing prices as np array
+    low = daily_data["low"].to_numpy()  # daily closing prices as np array
+    typical_price = np.sum(close, high, low) / 3
+
+    out = {
+        "keep_row": [False] * OFFSET,  # these rows will be deleted later, first N minutes of a day
+        "typical_price": typical_price,
+        "20min_sma": [0] * OFFSET,
+        "20min_tsma": [0] * OFFSET,
+        "20min_sd_tp": [0] * OFFSET,
+        "20min_ema": [0] * (OFFSET-1) + np.mean(close[0:OFFSET-1]),
+
+    }
+
+    for i in range(OFFSET, len(close)):
+
+        subset_close = close[i - OFFSET:i]
+        subset_typical_price = typical_price[i - OFFSET:i]
+
+        out["keep_row"].append(True)
+
+        out["20min_sma"].append(np.mean(subset_close[i - OFFSET:i]))
+        out["20min_tsma"].append(np.mean(subset_typical_price[i - OFFSET:i]))
+
+        out["20min_sd_tp"].append(np.std(subset_typical_price))
+
+        prev_ema = out["20min_ema"][i-1]
+        out["20min_ema"].append(((close[i] - prev_ema) * EMA20_MULTIPLIER) + prev_ema)
+
+    out["20min_diff_sma_ema"] = out["20min_sma"] - out["20min_ema"]
+    out["bbu"] = out["20min_tsma"] + 2*out["20min_sd_tp"]
+    out["bbl"] = out["20min_tsma"] - 2*out["20min_sd_tp"]
+
+    return out
 
 
 def initiate_20min_indicators(daily_data):
@@ -20,11 +59,14 @@ def initiate_20min_indicators(daily_data):
     # initialize output with first N rows
     out = {
         "keep_row": [False] * OFFSET,  # these rows will be deleted later, first N minutes of a day
+        "20min_sma": [0] * OFFSET,
+        "20min_tsma": [0] * OFFSET,
     }
 
     for i in range(OFFSET, len(close)):
         out["keep_row"].append(True)
-
+        out["20min_sma"].append(np.mean(subset_close[i - OFFSET:i]))
+        out["20min_tsma"].append(np.mean(subset_typical_price[i - OFFSET:i]))
     return out
 
 

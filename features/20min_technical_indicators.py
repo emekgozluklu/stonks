@@ -144,6 +144,10 @@ def get_20min_ema(daily_data):
     return out
 
 
+
+
+
+
 def get_20min_diff_sma_ema(sma_data, ema_data):
     sma = sma_data["20min_sma"].to_numpy()
     ema = ema_data["20min_ema"].to_numpy()
@@ -159,7 +163,7 @@ def get_20min_bb(tsma_data, sd_tp_data):
     TSMA_20min = tsma_data["20min_tsma"].to_numpy()
     SD_TP_20min = sd_tp_data["20min_sd_tp"].to_numpy()
 
-    # 2 usual standart for the BB width
+    # 2 usual standard for the BB width
     out = {"bbu": TSMA_20min + 2 * SD_TP_20min, "bbl": TSMA_20min - 2 * SD_TP_20min}
 
     return out

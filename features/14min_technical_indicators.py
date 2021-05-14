@@ -54,7 +54,5 @@ def get_14min_rsi(daily_data):
         subset_gain = gain[i - OFFSET:i]
         subset_loss = loss[i - OFFSET:i]
 
-
-
     return out
 

@@ -11,7 +11,7 @@ WRITE_DATA_PATH = os.path.join("..", "data", "grouped_by_date")
 try:
     files = os.listdir(DATA_PATH)
 except FileNotFoundError:
-    raise Exception("You shoul first run the imputer.")
+    raise Exception("You should first run the imputer.")
 
 # create write directory
 try:

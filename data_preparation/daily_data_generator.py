@@ -3,15 +3,18 @@ import joblib
 import os
 
 # set read and write data paths
-data_path = os.path.join("..", "data", "imputed", "grouped_by_date")
-write_data_path = os.path.join("..", "data", "imputed", "daily_closing_prices")
+data_path = os.path.join("..", "data", "grouped_by_date")
+data_write_path = os.path.join("..", "data", "daily")
 
 # get the list of files to be read
-files = os.listdir(data_path)
+try:
+    files = os.listdir(data_path)
+except FileNotFoundError:
+    raise Exception("You should first run the group_by_date script.")
 
 # create write directory
 try:
-    os.mkdir(write_data_path)
+    os.mkdir(data_write_path)
 except FileExistsError:
     pass
 
@@ -45,8 +48,8 @@ for file in files:
         daily["high"].append(grouped_data[i]["high"].iloc[-1])
         daily["low"].append(grouped_data[i]["low"].iloc[-1])
         daily["close"].append(grouped_data[i]["close"].iloc[-1])
-        daily["volume"].append(grouped_data[i]["volume"].iloc[-1])
-        daily["total_quantity"].append(grouped_data[i]["total_quantity"].iloc[-1])
+        daily["volume"].append(grouped_data[i]["volume"].sum())
+        daily["total_quantity"].append(grouped_data[i]["total_quantity"].iloc[-1].sum())
         daily["weighted_average"].append(grouped_data[i]["weighted_average"].iloc[-1])
 
-    joblib.dump(pd.DataFrame(data=daily), os.path.join(write_data_path, label[:-4] + ".joblib"))
+    joblib.dump(pd.DataFrame(data=daily), os.path.join(data_write_path, label[:-4] + ".joblib"))

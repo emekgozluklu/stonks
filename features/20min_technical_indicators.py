@@ -1,9 +1,6 @@
 import os
-import joblib
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
-
 
 pd.set_option("display.precision", 4)
 
@@ -53,8 +50,9 @@ def get_technical_indicator_features(daily_data):
     return out
 
 
-def initiate_20min_indicators(daily_data):
+def initiate_20min_indicators(daily_data, typical_price_data):
     close = daily_data["close"].to_numpy()  # daily closing prices as np array
+    typical_price = typical_price_data["typical_price"].to_numpy()
 
     # initialize output with first N rows
     out = {
@@ -64,6 +62,9 @@ def initiate_20min_indicators(daily_data):
     }
 
     for i in range(OFFSET, len(close)):
+        subset_close = close[i - OFFSET:i]
+        subset_typical_price = typical_price[i - OFFSET:i]
+
         out["keep_row"].append(True)
         out["20min_sma"].append(np.mean(subset_close[i - OFFSET:i]))
         out["20min_tsma"].append(np.mean(subset_typical_price[i - OFFSET:i]))

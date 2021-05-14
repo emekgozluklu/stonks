@@ -1,10 +1,6 @@
 import os
-import joblib
 import numpy as np
 import pandas as pd
-
-from tqdm import tqdm
-
 
 pd.set_option("display.precision", 4)
 
@@ -80,6 +76,7 @@ def get_14min_rsi(daily_data):
 
     return out
 
+
 def get_14min_mfi(typical_price_data, raw_money_flow_data):
     typical_price = typical_price_data["typical_price"].to_numpy()
     # Typical pricela bulmadın direkt excelde olduğunu düşündün
@@ -122,11 +119,11 @@ def get_14min_mfi(typical_price_data, raw_money_flow_data):
             money_flow_ratio = np.append(MFR)
             money_flow_index = np.append(MFI)
     out = {
-        "up_or_down": up_or_down,
-        "positive_money_flow": positive_money_flow,
-        "negative_money_flow": negative_money_flow,
-        "money_flow_ratio": money_flow_ratio,
-        "money_flow_index": money_flow_index,
+        "min_up_or_down": up_or_down,
+        "14min_positive_money_flow": positive_money_flow,
+        "14min_negative_money_flow": negative_money_flow,
+        "14min_money_flow_ratio": money_flow_ratio,
+        "14min_money_flow_index": money_flow_index,
     }
 
     return out
@@ -150,5 +147,25 @@ def get_14min_stochastic_oscillator(daily_data):
         subset_close = close[i - OFFSET:i]
         fast_stochastic = np.append(((subset_close[-1]-min(subset_close))/(max(subset_close) - min(subset_close)))*100)
     out["fast_stochastic"] = fast_stochastic
+
+    return out
+
+
+def get_min_obv(daily_data, raw_money_flow_data):
+    close = daily_data["close"].to_numpy()
+    volume = raw_money_flow_data["raw_money_flow"].to_numpy()
+
+    out = {
+        "min_obv": [0],
+    }
+
+    # Indexing problem may happen
+    obv = 0
+    for i in range(1, len(close)):
+        if close[i] <= close[i-1]:
+            obv -= volume[i]
+        else:
+            obv += volume[i]
+        out["min_obv"].append(obv)
 
     return out

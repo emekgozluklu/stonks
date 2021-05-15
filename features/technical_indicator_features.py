@@ -219,4 +219,4 @@ class TechnicalAnalysisFeatures:
         self.set_ichimoku_features()
         self.convert_all_daily_features()
 
-        return self.features
+        return pd.DataFrame(data=self.features)

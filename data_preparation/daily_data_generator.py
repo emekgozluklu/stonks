@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import joblib
 import os
 
@@ -44,12 +45,12 @@ for file in files:
 
     for i in grouped_data:
         daily["date"].append(i)
-        daily["open"].append(grouped_data[i]["open"].iloc[-1])
-        daily["high"].append(grouped_data[i]["high"].iloc[-1])
-        daily["low"].append(grouped_data[i]["low"].iloc[-1])
+        daily["open"].append(grouped_data[i]["open"].iloc[0])
+        daily["high"].append(np.max(grouped_data[i]["high"]))
+        daily["low"].append(np.min(grouped_data[i]["low"]))
         daily["close"].append(grouped_data[i]["close"].iloc[-1])
         daily["volume"].append(grouped_data[i]["volume"].sum())
-        daily["total_quantity"].append(grouped_data[i]["total_quantity"].iloc[-1].sum())
+        daily["total_quantity"].append(grouped_data[i]["total_quantity"].sum())
         daily["weighted_average"].append(grouped_data[i]["weighted_average"].iloc[-1])
 
     joblib.dump(pd.DataFrame(data=daily), os.path.join(data_write_path, label + ".joblib"))

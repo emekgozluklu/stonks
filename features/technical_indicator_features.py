@@ -100,8 +100,10 @@ class TechnicalAnalysisFeatures:
         bb = ta.volatility.BollingerBands(close=self.daily["close"], window=20, fillna=True)
         self.features["bb_high_band_day"] = bb.bollinger_hband()
         self.features["bb_low_band_day"] = bb.bollinger_lband()
+
         self.features["bollinger_hband_indicator_day"] = bb.bollinger_hband_indicator()
         self.features["bollinger_lband_indicator_day"] = bb.bollinger_lband_indicator()
+
         self.features["bollinger_pband_day"] = bb.bollinger_pband()
         self.features["bollinger_wband_day"] = bb.bollinger_wband()
 

@@ -144,10 +144,6 @@ def get_20min_ema(daily_data):
     return out
 
 
-
-
-
-
 def get_20min_diff_sma_ema(sma_data, ema_data):
     sma = sma_data["20min_sma"].to_numpy()
     ema = ema_data["20min_ema"].to_numpy()

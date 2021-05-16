@@ -14,10 +14,16 @@ except FileExistsError:
 for stock in stocks:
     print(f"Running for {stock}", end="...")
     pbf = price.extract_price_based_feature_for_stock(stock)
+    pbf_cols = pbf.columns
 
     ind = indicators.TechnicalAnalysisFeatures(stock)
     tif = ind.run_all()
+    tif_cols = tif.columns
+
+    all_cols = list(pbf_cols) + list(tif_cols)
 
     features = pd.concat([pbf, tif], axis=1, ignore_index=True)
+    features.columns = all_cols
+
     features.to_csv(os.path.join(write_path, stock+".csv"))
     print(" Done!")

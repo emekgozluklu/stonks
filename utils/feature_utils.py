@@ -1,4 +1,4 @@
-features = {
+technical_analysis_features = {
     "sma_12min": None,
     "sma_12day": None,
     "sma_20min": None,
@@ -45,13 +45,6 @@ features = {
     "macd_day": None,
     "macd_signal_day": None,
     "macd_diff_day": None,
-
-    "bb_high_band_min": None,
-    "bb_low_band_min": None,
-    "bollinger_hband_indicator_min": None,
-    "bollinger_lband_indicator_min": None,
-    "bollinger_pband_min": None,
-    "bollinger_wband_min": None,
 
     "bb_high_band_day": None,
     "bb_low_band_day": None,

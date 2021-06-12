@@ -1,4 +1,4 @@
-from selected_technical_analysis_features import features
+from utils.feature_utils import technical_analysis_features
 from os.path import join as path
 import pandas as pd
 
@@ -17,7 +17,8 @@ class TechnicalAnalysisFeatures:
         self.daily = joblib.load(path("..", "data", "daily", label+".joblib"))
         self.raw = pd.read_csv(path("..", "data", "imputed_1min", label+".csv"))
 
-        self.features = features
+
+        self.features = technical_analysis_features
 
         self.daily_feature_names = [
             'sma_12day', 'sma_20day', 'ema_12day', 'ema_20day', 'dev_from_sma_12day', 'dev_from_sma_20day',

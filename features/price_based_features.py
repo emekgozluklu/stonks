@@ -3,6 +3,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
+from config import PREFIX_OFFSET, PREDICTION_INTERVAL, POS_LABELING_THRESHOLD, POSTFIX_OFFSET
 
 pd.set_option("display.precision", 4)
 
@@ -13,8 +14,7 @@ FILES = os.listdir(DATA_PATH)
 FILES_GROUPED_BY_DATE = os.listdir(GROUPED_BY_DATE_PATH)
 
 
-# noinspection PyTypeChecker
-def price_based_features_for_day(daily_data, offset=30, previous_close=0):
+def price_based_features_for_day(daily_data, offset=PREFIX_OFFSET, previous_close=0):
     close = daily_data["close"].to_numpy()  # daily closing prices as np array
     high = daily_data["high"].to_numpy()  # daily high prices as np array
     low = daily_data["low"].to_numpy()  # daily low prices as np array
@@ -43,6 +43,7 @@ def price_based_features_for_day(daily_data, offset=30, previous_close=0):
         "last_30_min_interval": [0] * offset,
         "daily_avg_until_now": [0] * offset,
         "deviation_from_daily_avg_until_now": [0] * offset,
+        "label": [0] * offset
     }
 
     for i in range(offset, len(close)):
@@ -52,7 +53,7 @@ def price_based_features_for_day(daily_data, offset=30, previous_close=0):
         subset_high = high[i-30:i]
         subset_low = low[i-30:i]
 
-        out["keep_row"].append(True)
+        out["keep_row"].append(i > PREFIX_OFFSET and (len(close)-i) > POSTFIX_OFFSET)
 
         out["last_close"].append(subset_close[-1])  # last observed closing price value
         out["second_last_close"].append(subset_close[-2])  # second last observed closing price value

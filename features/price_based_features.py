@@ -84,6 +84,15 @@ def price_based_features_for_day(daily_data, offset=PREFIX_OFFSET, previous_clos
         out["daily_avg_until_now"].append(np.mean(close[:i]))
         out["deviation_from_daily_avg_until_now"].append(subset_close[-1] - np.mean(close[:i]))
 
+        # add label
+        try:
+            next_30min_high = np.max(high[i:i+PREDICTION_INTERVAL])
+            last_observed_price = subset_close[-1]
+            change_precentage = (next_30min_high - last_observed_price) / last_observed_price
+            out["label"].append((1 if change_precentage >= POS_LABELING_THRESHOLD else 0))
+        except IndexError:
+            out["label"].append(0)
+
     out["last_5_min_interval"] = np.array(out["last_5_min_high"]) - np.array(out["last_5_min_low"])
     out["last_10_min_interval"] = np.array(out["last_10_min_high"]) - np.array(out["last_10_min_low"])
     out["last_30_min_interval"] = np.array(out["last_30_min_high"]) - np.array(out["last_30_min_low"])

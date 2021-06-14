@@ -76,7 +76,7 @@ class RNN:
         )
 
         self.history = self.model.fit(self.x_train, self.y_train,
-                                      epochs=5, batch_size=128, validation_split=0.1)
+                                      epochs=6, batch_size=64, validation_split=0.1)
 
         print("Evaluate on test data")
         results = self.model.evaluate(self.x_test, self.y_test, batch_size=128)
